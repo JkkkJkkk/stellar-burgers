@@ -4,27 +4,38 @@ import { useNavigate } from 'react-router-dom';
 import { resetPasswordApi } from '@api';
 import { ResetPasswordUI } from '@ui-pages';
 
+interface ResetPasswordState {
+  password: string;
+  token: string;
+}
+
 export const ResetPassword: FC = () => {
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
+
+  const [password, setPassword] = useState<string>('');
+  const [token, setToken] = useState<string>('');
   const [error, setError] = useState<Error | null>(null);
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();
     setError(null);
-    resetPasswordApi({ password, token })
-      .then(() => {
-        localStorage.removeItem('resetPassword');
-        navigate('/login');
-      })
-      .catch((err) => setError(err));
+
+    try {
+      const atrResetPass: ResetPasswordState = {
+        password,
+        token
+      };
+      await resetPasswordApi(atrResetPass);
+      localStorage.removeItem('resetPassword');
+      navigate('/login');
+    } catch (err: any) {
+      setError(err);
+    }
   };
 
   useEffect(() => {
-    if (!localStorage.getItem('resetPassword')) {
+    if (!localStorage.getItem('resetPassword'))
       navigate('/forgot-password', { replace: true });
-    }
   }, [navigate]);
 
   return (

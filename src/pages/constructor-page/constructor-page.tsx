@@ -7,9 +7,10 @@ import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC } from 'react';
 
+import { getIngredientState } from '../../services/slices/ingredients-slice/ingredients';
+
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const isIngredientsLoading = useSelector(getIngredientState).loading;
 
   return (
     <>

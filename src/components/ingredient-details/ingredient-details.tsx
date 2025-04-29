@@ -1,14 +1,25 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
+import { getIngredientState } from '../../services/slices/ingredients-slice/ingredients';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  const ingredientData = null;
+  const { id } = useParams();
+  const { ingredients, loading, error } = useSelector(getIngredientState);
 
-  if (!ingredientData) {
-    return <Preloader />;
-  }
+  const currentIngredient = useMemo(
+    () => ingredients.find((item) => item._id === id),
+    [ingredients, id]
+  );
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  if (loading) return <Preloader />;
+  if (error)
+    return <div className='text-center text-red-500'>Ошибка: {error}</div>;
+  if (!currentIngredient)
+    return <div className='text-center'>Ингредиент не найден</div>;
+
+  return <IngredientDetailsUI ingredientData={currentIngredient} />;
 };
