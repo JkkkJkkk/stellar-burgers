@@ -31,6 +31,16 @@ export const getRegisterUser = createUserThunk(
 );
 export const getLoginUser = createUserThunk('login', userApi.loginUser);
 export const updateUser = createUserThunk('update', userApi.updateUserData);
+export const checkUserAuth = createAsyncThunk(
+  'user/checkAuth',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await userApi.fetchUser();
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
+);
 
 export const createSimpleThunk = (type: string, apiCall: () => Promise<any>) =>
   createAsyncThunk(`user/${type}`, async (_, { rejectWithValue }) => {
@@ -84,6 +94,7 @@ const userSlice = createSlice({
         state.request = false;
         state.user = payload.user;
         state.isAuthenticated = true;
+        state.isAuthChecked = true;
       })
       .addCase(getLoginUser.pending, (state) => {
         state.loginUserRequest = true;
@@ -95,6 +106,19 @@ const userSlice = createSlice({
       })
       .addCase(getLoginUser.fulfilled, (state, { payload }) => {
         state.loginUserRequest = false;
+        state.user = payload.user;
+        state.isAuthenticated = true;
+        state.isAuthChecked = true;
+      })
+      .addCase(checkUserAuth.pending, (state) => {
+        state.isAuthChecked = false;
+      })
+      .addCase(checkUserAuth.rejected, (state) => {
+        state.isAuthChecked = true;
+        state.isAuthenticated = false;
+      })
+      .addCase(checkUserAuth.fulfilled, (state, { payload }) => {
+        state.isAuthChecked = true;
         state.user = payload.user;
         state.isAuthenticated = true;
       })
@@ -122,6 +146,7 @@ const userSlice = createSlice({
         state.request = false;
         state.user = null;
         state.isAuthenticated = false;
+        state.isAuthChecked = true;
       })
       .addCase(getOrders.pending, handlePending)
       .addCase(getOrders.rejected, handleRejected)
@@ -133,7 +158,5 @@ const userSlice = createSlice({
 });
 
 export const { userLogout, resetError, setAuthChecked } = userSlice.actions;
-
 export const selectUserState = (state: RootState) => state.user;
-
 export default userSlice.reducer;

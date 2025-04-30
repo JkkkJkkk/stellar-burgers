@@ -16,6 +16,7 @@ import {
 import { ProtectedRoute } from '../protected-route/protected-route';
 import styles from './app.module.css';
 import { getIngredients } from '../../services/slices/ingredients-slice/ingredients';
+import { checkUserAuth } from '../../services/slices/user-Info-slice/user-info';
 
 const MODAL_TITLES = {
   INGREDIENT: 'Детали ингредиента',
@@ -33,6 +34,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
+    dispatch(checkUserAuth());
   }, [dispatch]);
 
   const commonRoutes = (
