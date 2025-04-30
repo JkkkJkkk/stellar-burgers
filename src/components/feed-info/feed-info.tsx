@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { getFeedState } from '../../services/slices/feed-slice/feed';
 import { FeedInfoUI } from '../ui/feed-info';
 import { TOrder } from '@utils-types';

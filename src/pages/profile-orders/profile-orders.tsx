@@ -1,5 +1,5 @@
 import { FC, useEffect, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from '../../services/store';
 import { ProfileOrdersUI } from '@ui-pages';
 import { Preloader } from '@ui';
 import { getFeeds } from '../../services/slices/feed-slice/feed';
@@ -7,10 +7,9 @@ import {
   getOrders,
   selectUserState
 } from '../../services/slices/user-Info-slice/user-info';
-import type { AppDispatch } from '../../services/store';
 
 export const ProfileOrders: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const { userOrders, request: isLoading } = useSelector(selectUserState);
   const [error, setError] = useState<string | null>(null);
 
