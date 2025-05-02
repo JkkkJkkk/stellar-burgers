@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import { LoginUI } from '@ui-pages';
 import {
   getLoginUser,
