@@ -1,7 +1,7 @@
 {
-    "success": true,
-    "name": "TEST_NAME",
-    "order": {
-      "number": 76123
-    }
+  "success": true,
+  "name": "Краторный бургер",
+  "order": {
+    "number": 76165
   }
+}
