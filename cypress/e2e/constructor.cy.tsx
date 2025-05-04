@@ -1,14 +1,23 @@
-/// <reference types="cypress" />
-
-describe('Тесты Конструктора Бургеров - с кнопками добавления', () => {
+describe('Тесты Конструктора Бургеров - полный цикл', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
-    cy.intercept('GET', '**/auth/user', { fixture: 'user.json' }).as('getUser');
-    cy.intercept('POST', '**/orders', { fixture: 'order.json' }).as(
-      'createOrder'
-    );
+
+    cy.intercept('GET', '**/auth/user', {
+      fixture: 'user.json'
+    }).as('getUser');
+
+    cy.intercept('POST', '**/orders', {
+      statusCode: 200,
+      body: {
+        success: true,
+        name: 'Space флюоресцентный бургер',
+        order: {
+          number: 76176
+        }
+      }
+    }).as('createOrder');
 
     cy.setCookie('accessToken', 'Bearer mockAccessToken');
     cy.setCookie('refreshToken', 'mockRefreshToken');
@@ -17,33 +26,32 @@ describe('Тесты Конструктора Бургеров - с кнопка
     cy.wait('@getIngredients');
   });
 
-  it('добавляет булку, начинку и соус', () => {
+  it('оформляет заказ и проверяет модальное окно', () => {
     cy.contains('Краторная булка N-200i')
       .parents('li')
       .within(() => {
         cy.contains('Добавить').click();
       });
-
+    cy.contains('Краторная булка N-200i')
+      .parents('li')
+      .within(() => {
+        cy.contains('Добавить').click();
+      });
     cy.contains('Филе Люминесцентного тетраодонтимформа')
       .parents('li')
       .within(() => {
         cy.contains('Добавить').click();
       });
-
-    cy.contains('Соус Spicy-X')
-      .parents('li')
-      .within(() => {
-        cy.contains('Добавить').click();
-      });
-
-    cy.get('[class*=constructor]').should('contain', 'Краторная булка N-200i');
-
-    cy.get('[class*=constructor]').should(
-      'contain',
-      'Филе Люминесцентного тетраодонтимформа'
-    );
-
-    cy.get('[class*=constructor]').should('contain', 'Соус Spicy-X');
+    cy.contains('Оформить заказ').click();
+    cy.wait('@createOrder');
+    cy.get('.xqsNTMuGR8DdWtMkOGiM').should('exist');
+    cy.get('.U070UGjz0x5J0l3NxX3I').should('contain', '76176');
+    cy.contains('идентификатор заказа').should('exist');
+    cy.contains('Ваш заказ начали готовить').should('exist');
+    cy.contains('Дождитесь готовности на орбитальной станции').should('exist');
+    cy.get('.Z7mUFPBZScxutAKTLKHN').click();
+    cy.get('.xqsNTMuGR8DdWtMkOGiM').should('not.exist');
+    cy.get('[class*="constructor-element"]').should('not.exist');
   });
 });
 
@@ -76,3 +84,4 @@ describe('Модальное окно ингредиента', () => {
     cy.get('#modals').should('not.be.visible');
   });
 });
+
