@@ -4,7 +4,7 @@ import type { TUserState } from './type';
 import * as userApi from '../../../utils/users-api';
 import type { TLoginData, TRegisterData } from '@api';
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   request: false,
   error: null,
   response: null,
@@ -159,4 +159,4 @@ const userSlice = createSlice({
 
 export const { userLogout, resetError, setAuthChecked } = userSlice.actions;
 export const selectUserState = (state: RootState) => state.user;
-export default userSlice.reducer;
+export const userReducer = userSlice.reducer;

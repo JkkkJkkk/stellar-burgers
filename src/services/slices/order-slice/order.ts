@@ -26,7 +26,7 @@ export const getOrderByNumber = createAsyncThunk<TOrder[], number>(
   }
 );
 
-const orderSlice = createSlice({
+const orderReducer = createSlice({
   name: 'order',
   initialState,
   reducers: {},
@@ -53,4 +53,4 @@ const orderSlice = createSlice({
 
 export const getOrderState = (state: RootState): OrderState => state.order;
 
-export default orderSlice.reducer;
+export default orderReducer.reducer;

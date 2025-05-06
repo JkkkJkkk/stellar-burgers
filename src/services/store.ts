@@ -6,12 +6,12 @@ import {
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import { ingredientReducer } from './slices/ingredients-slice/ingredients';
-import userReducer from './slices/user-Info-slice/user-info';
+import { userReducer } from './slices/user-Info-slice/user-info';
 import { feedReducer } from './slices/feed-slice/feed';
 import orderReducer from './slices/order-slice/order';
 import { constructorReducer } from './slices/burgers-slice/burgers';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   burders: constructorReducer,
   ingredients: ingredientReducer,
   user: userReducer,
@@ -29,5 +29,3 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useDispatch: () => AppDispatch = () => dispatchHook();
 export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
-
-export default store;

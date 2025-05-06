@@ -3,7 +3,7 @@ import { getFeedsApi } from '@api';
 import { RootState } from '../../store';
 import { IFeedsResponse, IFeedState } from './type';
 
-const initialState: IFeedState = {
+export const initialState: IFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
